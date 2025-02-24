@@ -1,6 +1,6 @@
 // require('dotenv').config({path: './env'})  //isse bhi code run ho jayega bt ye acha approach nhii h so import krenge dotenv ko
 import dotenv from  "dotenv"
-
+import {app} from './app.js'
 import connectDB from "./db/index.js";
 
 dotenv.config(
