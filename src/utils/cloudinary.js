@@ -1,5 +1,5 @@
-import {v2 as cloudinary} fron "cloudinary"
-import fs as "fs"
+import {v2 as cloudinary} from "cloudinary"
+import fs from "fs"
 
 // Initialize Cloudinary
 
@@ -26,16 +26,31 @@ cloudinary.config({
 
 const uploadOnCloudinary = async (localFilePath) => {
     try {
-        if(!localFilePath) return null;
+        if (!localFilePath) return null;
+
+        // Upload to Cloudinary
         const uploadResult = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto"
         });
-        console.log("File uploaded to Cloudinary successfully:", uploadResult.secure_url);
+
+        console.log("File uploaded successfully:", uploadResult.secure_url);
+
+        // ✅ Check if file exists before deleting it
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath);
+        }
+
         return uploadResult.secure_url;
     } catch (error) {
-        fs.unlinkSync(localFilePath) //agr kuch galat huaa to server per s delete kr dena h
+        console.error("Cloudinary Upload Error:", error);
+
+        // ✅ Only delete if file exists
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath);
+        }
+
         return null;
     }
-}
+};
 
-export {uploadOnCloudinary}
+export { uploadOnCloudinary };
